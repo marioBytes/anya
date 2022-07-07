@@ -15,15 +15,19 @@ defmodule Anya.Invoices.Query do
     |> preload_invoice_items()
   end
 
+  def user_invoices(user_id) do
+    with_meta_data() |> where([i], i.user_id == ^user_id)
+  end
+
   defp preload_client_address(query) do
-    query |> join(:inner, [i], ca in ClientAddress, on: ca.invoice_id == i.id)
+    query |> preload(:client_address)
   end
 
   defp preload_sender_address(query) do
-    query |> join(:inner, [i], sa in SenderAddress, on: sa.invoice_id == i.id)
+    query |> preload(:sender_address)
   end
 
   defp preload_invoice_items(query) do
-    query |> join(:inner, [i], it in Item, on: it.invoice_id == i.id)
+    query |> preload(:items)
   end
 end

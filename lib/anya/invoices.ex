@@ -2,11 +2,16 @@ defmodule Anya.Invoices do
   import Ecto.Query, warn: false
   alias Anya.Repo
 
-  alias Anya.Invoices.{ClientAddress, Invoice, Item, SenderAddress}
+  alias Anya.Invoices
+  alias Anya.Invoices.Invoice
   alias Anya.Accounts
 
   def list_invoices do
     Repo.all(Invoice)
+  end
+
+  def list_user_invoices(user_id) do
+    Invoices.Query.user_invoices(user_id) |> Repo.all()
   end
 
   def get_invoice!(id), do: Repo.get!(Invoice, id)
