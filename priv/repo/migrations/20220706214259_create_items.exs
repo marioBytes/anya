@@ -8,7 +8,7 @@ defmodule Anya.Repo.Migrations.CreateItems do
       add :price, :integer
       add :total, :integer
 
-      references :invoice_id, on_delete: :delete_all
+      add :invoice_id, references(:invoices, on_delete: :delete_all)
 
       timestamps()
     end

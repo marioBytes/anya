@@ -8,7 +8,7 @@ defmodule Anya.Repo.Migrations.CreateClientAddresses do
       add :post_code, :string
       add :country, :string
 
-      references :invoice_id, on_delete: :delete_all
+      add :invoice_id, references(:invoices, on_delete: :delete_all)
 
       timestamps()
     end
