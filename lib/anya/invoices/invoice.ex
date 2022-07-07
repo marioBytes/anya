@@ -14,6 +14,10 @@ defmodule Anya.Invoices.Invoice do
 
     belongs_to(:user, Anya.Accounts.User)
 
+    has_one :client_address, Anya.Invoices.ClientAddress
+    has_one :sender_address, Anya.Invoices.SenderAddress
+    has_many :items, Anya.Invoices.Item
+
     timestamps()
   end
 
