@@ -4,9 +4,9 @@ defmodule Anya.Invoices.Item do
 
   schema "items" do
     field :name, :string
-    field :price, :integer
+    field :price, :float
     field :quantity, :integer
-    field :total, :integer
+    field :total, :float
 
     belongs_to :invoice, Anya.Invoices.Invoice
 
