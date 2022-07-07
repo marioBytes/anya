@@ -78,6 +78,10 @@ defmodule AnyaWeb.Router do
     get "/users/settings", UserSettingsController, :edit
     put "/users/settings", UserSettingsController, :update
     get "/users/settings/confirm_email/:token", UserSettingsController, :confirm_email
+
+    live_session :default, on_mount: AnyaWeb.UserAuthLive do
+      live "/invoices", InvoiceLive.Index
+    end
   end
 
   scope "/", AnyaWeb do
