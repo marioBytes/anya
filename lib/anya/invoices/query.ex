@@ -1,15 +1,12 @@
 defmodule Anya.Invoices.Query do
   import Ecto.Query
 
-  alias Anya.Accounts.User
-  alias Anya.Invoices.{ClientAddress, Invoice, Item, SenderAddress}
-
   def base() do
     Invoice
   end
 
   def with_meta_data() do
-    base
+    base()
     |> preload_client_address()
     |> preload_sender_address()
     |> preload_invoice_items()

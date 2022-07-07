@@ -3,7 +3,7 @@ defmodule Anya.Invoices do
   alias Anya.Repo
 
   alias Anya.Invoices
-  alias Anya.Invoices.Invoice
+  alias Anya.Invoices.{Invoice, SenderAddress, ClientAddress, Item}
   alias Anya.Accounts
 
   def list_invoices do
