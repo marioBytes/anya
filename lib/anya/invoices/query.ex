@@ -1,6 +1,8 @@
 defmodule Anya.Invoices.Query do
   import Ecto.Query
 
+  alias Anya.Invoices.Invoice
+
   def base() do
     Invoice
   end
