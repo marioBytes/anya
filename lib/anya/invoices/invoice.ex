@@ -35,17 +35,7 @@ defmodule Anya.Invoices.Invoice do
       :payment_terms,
       :user_id
     ])
-    |> validate_required([
-      :description,
-      :client_name,
-      :client_email,
-      :status,
-      :uuid,
-      :total,
-      :payment_due,
-      :payment_terms,
-      :user_id
-    ])
+    |> maybe_validate_required()
     |> validate_format(:client_email, ~r/^[^\s]+@[^\s]+$/,
       message: "must have the @ sign and no spaces"
     )
@@ -56,6 +46,24 @@ defmodule Anya.Invoices.Invoice do
       "net 90",
       "1%/10 net 30",
       "due on receipt"
+    ])
+  end
+
+  defp maybe_validate_required(%{changes: %{status: "draft"}} = changeset) do
+    changeset
+  end
+
+  defp maybe_validate_required(changeset) do
+    validate_required(changeset, [
+      :description,
+      :client_name,
+      :client_email,
+      :status,
+      :uuid,
+      :total,
+      :payment_due,
+      :payment_terms,
+      :user_id
     ])
   end
 end
