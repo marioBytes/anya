@@ -47,6 +47,9 @@ defmodule Anya.Invoices.Invoice do
       "1%/10 net 30",
       "due on receipt"
     ])
+    |> cast_assoc(:client_address)
+    |> cast_assoc(:sender_address)
+    |> cast_assoc(:items)
   end
 
   defp maybe_validate_required(%{changes: %{status: "draft"}} = changeset) do

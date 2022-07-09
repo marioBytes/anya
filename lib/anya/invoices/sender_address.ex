@@ -16,7 +16,7 @@ defmodule Anya.Invoices.SenderAddress do
   @doc false
   def changeset(sender_address, attrs) do
     sender_address
-    |> cast(attrs, [:street, :city, :post_code, :country, :invoice_id])
-    |> validate_required([:street, :city, :post_code, :country, :invoice_id])
+    |> cast(attrs, [:street, :city, :post_code, :country])
+    |> validate_required([:street, :city, :post_code, :country])
   end
 end

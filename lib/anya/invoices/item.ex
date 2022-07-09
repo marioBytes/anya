@@ -8,6 +8,9 @@ defmodule Anya.Invoices.Item do
     field :quantity, :integer
     field :total, :float
 
+    field :temp_id, :string, virtual: true
+    field :delete, :boolean, virtual: true
+
     belongs_to :invoice, Anya.Invoices.Invoice
 
     timestamps()
@@ -16,7 +19,19 @@ defmodule Anya.Invoices.Item do
   @doc false
   def changeset(item, attrs) do
     item
-    |> cast(attrs, [:name, :quantity, :price, :total, :invoice_id])
-    |> validate_required([:name, :quantity, :price, :total, :invoice_id])
+    |> Map.put(:temp_id, (item.temp_id or attrs["temp_id"]))
+    |> cast(attrs, [:name, :quantity, :price, :total, :delete])
+    |> validate_required([:name, :quantity, :price, :total])
+    |> maybe_mark_for_deletion()
+  end
+
+  defp maybe_mark_for_deletion(%{data: %{id: nil}} = changeset), do: changeset
+
+  defp maybe_mark_for_deletion(changeset) do
+    if get_change(changeset, :delete) do
+      %{changeset | action: :delete}
+    else
+      changeset
+    end
   end
 end
