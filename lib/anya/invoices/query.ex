@@ -27,6 +27,10 @@ defmodule Anya.Invoices.Query do
   end
 
   defp preload_invoice_items(query) do
-    query |> preload(:items)
+    query |> preload([items: ^order_invoice_items_by_id()])
+  end
+
+  defp order_invoice_items_by_id() do
+    from(i in Items, order_by: i.id)
   end
 end
