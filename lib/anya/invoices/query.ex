@@ -1,7 +1,7 @@
 defmodule Anya.Invoices.Query do
   import Ecto.Query
 
-  alias Anya.Invoices.Invoice
+  alias Anya.Invoices.{Invoice, Item}
 
   def base() do
     Invoice
@@ -31,6 +31,6 @@ defmodule Anya.Invoices.Query do
   end
 
   defp order_invoice_items_by_id() do
-    from(i in Items, order_by: i.id)
+    from(i in Item, order_by: i.id)
   end
 end
