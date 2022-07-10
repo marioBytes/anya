@@ -1,6 +1,0 @@
-<%= for invoice <- @invoices do %>
-  <%= invoice.description %>
-  <%= for item <- invoice.items do %>
-    <%= item.name %>
-  <% end %>
-<% end %>

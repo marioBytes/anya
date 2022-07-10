@@ -80,7 +80,13 @@ defmodule AnyaWeb.Router do
     get "/users/settings/confirm_email/:token", UserSettingsController, :confirm_email
 
     live_session :default, on_mount: AnyaWeb.UserAuthLive do
-      live "/invoices", InvoiceLive.Index
+    live "/invoice", InvoiceLive.Index, :index
+    live "/invoice/new", InvoiceLive.Index, :new
+    live "/invoice/:id/edit", InvoiceLive.Index, :edit
+
+    live "/invoice/:id", InvoiceLive.Show, :show
+    live "/invoice/:id/show/edit", InvoiceLive.Show, :edit
+
     end
   end
 

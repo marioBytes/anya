@@ -14,7 +14,9 @@ defmodule Anya.Invoices do
     Invoices.Query.user_invoices(user_id) |> Repo.all()
   end
 
-  def get_invoice!(id), do: Repo.get!(Invoice, id)
+  def get_invoice!(id) do
+    Invoices.Query.with_meta_data() |> where([i], i.id == ^id) |> Repo.one!()
+  end
 
   def create_invoice(attrs \\ %{}) do
     %Invoice{}

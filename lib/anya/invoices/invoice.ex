@@ -12,6 +12,8 @@ defmodule Anya.Invoices.Invoice do
     field :total, :float
     field :uuid, :string
 
+    field :invoice_date, :string, virtual: true
+
     belongs_to(:user, Anya.Accounts.User)
 
     has_one :client_address, Anya.Invoices.ClientAddress

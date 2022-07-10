@@ -1,0 +1,100 @@
+<div id="invoice-form">
+  <h2><%= @title %></h2>
+  <.form
+    let={f}
+    for={@changeset}
+    id="invoice-form"
+    phx_target={@myself}
+    phx-change="validate"
+    phx-submit="save"
+  >
+    <h4>Bill From</h4>
+    <%= inputs_for f, :sender_address, fn sa -> %>
+      <%= label sa, :street %>
+      <%= text_input sa, :street %>
+      <%= error_tag sa, :street %>
+
+      <%= label sa, :city %>
+      <%= text_input sa, :city %>
+      <%= error_tag sa, :city %>
+
+      <%= label sa, :post_code %>
+      <%= text_input sa, :post_code %>
+      <%= error_tag sa, :post_code %>
+
+      <%= label sa, :country %>
+      <%= text_input sa, :country %>
+      <%= error_tag sa, :country %>
+    <% end %>
+
+    <h4>Bill To</h4>
+    <%= label f, :client_name %>
+    <%= text_input f, :client_name %>
+    <%= error_tag f, :client_name %>
+
+    <%= label f, :client_email %>
+    <%= text_input f, :client_email %>
+    <%= error_tag f, :client_email %>
+
+    <%= inputs_for f, :client_address, fn ca -> %>
+      <%= label ca, :street %>
+      <%= text_input ca, :street %>
+      <%= error_tag ca, :street %>
+
+      <%= label ca, :city %>
+      <%= text_input ca, :city %>
+      <%= error_tag ca, :city %>
+
+      <%= label ca, :post_code %>
+      <%= text_input ca, :post_code %>
+      <%= error_tag ca, :post_code %>
+
+      <%= label ca, :country %>
+      <%= text_input ca, :country %>
+      <%= error_tag ca, :country %>
+    <% end %>
+
+    <%= label f, :inserted_at %>
+    <%= text_input f, :invoice_date, disabled: true %>
+    <%= error_tag f, :inserted_at %>
+
+    <%= label f, :payment_terms %>
+    <%= select f, :payment_terms, ["net 30", "net 60", "net 90", "1%/10 net 30", "due on receipt"] %>
+    <%= error_tag f, :payment_terms %>
+
+    <%= inputs_for f, :items, fn i -> %>
+      <%= label i, :name %>
+      <%= text_input i, :name %>
+      <%= error_tag i, :name %>
+
+      <%= label i, :quantity %>
+      <%= number_input i, :quantity, min: "1" %>
+      <%= error_tag i, :quantity %>
+
+      <%= label i, :price %>
+      <%= number_input i, :price, step: "0.01", min: "0.01" %>
+      <%= error_tag i, :price %>
+
+      <%= label i, :total %>
+      <%= text_input i, :total %>
+      <%= error_tag i, :total %>
+
+      <%= label i, :delete %><br />
+      <%= if is_nil(i.data.temp_id) do %>
+        <%= checkbox i, :delete %>
+      <% else %>
+        <%= hidden_input i, :temp_id %>
+        <a href="#" phx-target={@myself} phx-click="remove-item" phx-value-remove={i.data.temp_id}>
+          &times;
+        </a>
+      <% end %>
+    <% end %>
+
+    <br />
+    <a href="#" phx-target={@myself} phx-click="add-item">Add an item</a>
+
+    <div>
+      <%= submit "Save", phx_disable_with: "Saving..." %>
+    </div>
+  </.form>
+</div>

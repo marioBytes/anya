@@ -19,7 +19,7 @@ defmodule Anya.Invoices.Item do
   @doc false
   def changeset(item, attrs) do
     item
-    |> Map.put(:temp_id, (item.temp_id or attrs["temp_id"]))
+    |> Map.put(:temp_id, (item.temp_id || attrs["temp_id"]))
     |> cast(attrs, [:name, :quantity, :price, :total, :delete])
     |> validate_required([:name, :quantity, :price, :total])
     |> maybe_mark_for_deletion()

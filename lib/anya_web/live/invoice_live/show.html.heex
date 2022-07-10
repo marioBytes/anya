@@ -1,0 +1,27 @@
+<h1>Show Invoice</h1>
+
+<%= if @live_action in [:edit] do %>
+  <.modal return_to={Routes.invoice_show_path(@socket, :show, @invoice)}>
+    <.live_component
+      module={AnyaWeb.InvoiceLive.FormComponent}
+      id={@invoice.id}
+      title={@page_title}
+      action={@live_action}
+      invoice={@invoice}
+      return_to={Routes.invoice_show_path(@socket, :show, @invoice)}
+    />
+  </.modal>
+<% end %>
+
+<div>
+  <p>#<%= @invoice.uuid %></p>
+  <p>Invoice Date: <%= Enum.join([@invoice.inserted_at.month, @invoice.inserted_at.day, @invoice.inserted_at.year], "/") %></p>
+  <p>Payment Due: <%=
+    {:ok, timestamp} = DateTime.from_unix(@invoice.payment_due * 1000, :millisecond)
+    Enum.join([timestamp.month, timestamp.day, timestamp.year], "/")
+    %>
+  </p>
+</div>
+
+<span><%= live_patch "Edit", to: Routes.invoice_show_path(@socket, :edit, @invoice), class: "button" %></span> |
+<span><%= live_redirect "Back", to: Routes.invoice_index_path(@socket, :index) %></span>

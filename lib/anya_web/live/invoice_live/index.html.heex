@@ -1,0 +1,37 @@
+<h1>Listing Invoice</h1>
+
+<%= if @live_action in [:new, :edit] do %>
+  <.modal return_to={Routes.invoice_index_path(@socket, :index)}>
+    <.live_component
+      module={AnyaWeb.InvoiceLive.FormComponent}
+      id={@invoice.id || :new}
+      title={@page_title}
+      action={@live_action}
+      invoice={@invoice}
+      return_to={Routes.invoice_index_path(@socket, :index)}
+    />
+  </.modal>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="invoice">
+    <%= for invoice <- @invoice_collection do %>
+      <tr id={"invoice-#{invoice.id}"}>
+
+        <td>
+          <span><%= live_redirect "Show", to: Routes.invoice_show_path(@socket, :show, invoice) %></span>
+          <span><%= live_patch "Edit", to: Routes.invoice_index_path(@socket, :edit, invoice) %></span>
+          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: invoice.id, data: [confirm: "Are you sure?"] %></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<span><%= live_patch "New Invoice", to: Routes.invoice_index_path(@socket, :new) %></span>
