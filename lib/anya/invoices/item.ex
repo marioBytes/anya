@@ -4,9 +4,9 @@ defmodule Anya.Invoices.Item do
 
   schema "items" do
     field :name, :string
-    field :price, :float
+    field :price, Money.Ecto.Composite.Type
     field :quantity, :integer
-    field :total, :float
+    field :total, Money.Ecto.Composite.Type
 
     field :temp_id, :string, virtual: true
     field :delete, :boolean, virtual: true

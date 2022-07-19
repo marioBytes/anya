@@ -9,7 +9,7 @@ defmodule Anya.Invoices.Invoice do
     field :payment_due, :integer
     field :payment_terms, :string
     field :status, :string
-    field :total, :float
+    field :total, Money.Ecto.Composite.Type
     field :uuid, :string
 
     field :invoice_date, :string, virtual: true
