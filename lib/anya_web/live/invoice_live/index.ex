@@ -21,10 +21,16 @@ defmodule AnyaWeb.InvoiceLive.Index do
     |> assign(:invoice, Invoices.get_invoice!(id))
   end
 
-  defp apply_action(socket, :new, _params) do
+  defp apply_action(%{assigns: %{current_user: %{currency: currency}}} = socket, :new, _params) do
     invoice = %Invoice{
       client_address: %ClientAddress{},
-      items: [%Item{temp_id: IdGenerator.generate_temp_id(), total: 0.00}],
+      items: [
+        %Item{
+          temp_id: IdGenerator.generate_temp_id(),
+          price: 0,
+          total: Money.new(0, currency)
+        }
+      ],
       sender_address: %SenderAddress{},
       invoice_date: set_default_date()
     }
