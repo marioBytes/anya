@@ -75,9 +75,7 @@
       <%= number_input i, :price, step: "0.01", min: "0.01" %>
       <%= error_tag i, :price %>
 
-      <%= label i, :total %>
-      <%= text_input i, :total %>
-      <%= error_tag i, :total %>
+      Total: $<%= input_value(i, :total) %>
 
       <%= label i, :delete %><br />
       <%= if is_nil(i.data.temp_id) do %>

@@ -19,10 +19,11 @@ defmodule Anya.Invoices.Item do
   @doc false
   def changeset(item, attrs) do
     item
-    |> Map.put(:temp_id, (item.temp_id || attrs["temp_id"]))
+    |> Map.put(:temp_id, item.temp_id || attrs["temp_id"])
     |> cast(attrs, [:name, :quantity, :price, :total, :delete])
     |> validate_required([:name, :quantity, :price, :total])
     |> maybe_mark_for_deletion()
+    |> maybe_calculate_total()
   end
 
   defp maybe_mark_for_deletion(%{data: %{id: nil}} = changeset), do: changeset
@@ -33,5 +34,16 @@ defmodule Anya.Invoices.Item do
     else
       changeset
     end
+  end
+
+  defp maybe_calculate_total(%{changes: %{price: price, quantity: qty}} = changeset) do
+    total = qty * price
+    changeset = put_change(changeset, :total, total)
+
+    changeset
+  end
+
+  defp maybe_calculate_total(changeset) do
+    changeset
   end
 end
