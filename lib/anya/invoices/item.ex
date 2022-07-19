@@ -8,6 +8,7 @@ defmodule Anya.Invoices.Item do
     field :quantity, :integer
     field :total, Money.Ecto.Composite.Type
 
+    field :price_for_form, :float, virtual: true
     field :temp_id, :string, virtual: true
     field :delete, :boolean, virtual: true
 
@@ -20,8 +21,8 @@ defmodule Anya.Invoices.Item do
   def changeset(item, attrs) do
     item
     |> Map.put(:temp_id, item.temp_id || attrs["temp_id"])
-    |> cast(attrs, [:name, :quantity, :price, :total, :delete])
-    |> validate_required([:name, :quantity, :price, :total])
+    |> cast(attrs, [:name, :quantity, :total, :delete, :price_for_form])
+    |> validate_required([:name, :quantity, :total, :price_for_form])
     |> maybe_mark_for_deletion()
     |> maybe_calculate_total()
   end
@@ -36,9 +37,22 @@ defmodule Anya.Invoices.Item do
     end
   end
 
-  defp maybe_calculate_total(%{changes: %{price: price, quantity: qty}} = changeset) do
-    total = qty * price
-    changeset = put_change(changeset, :total, total)
+  defp maybe_calculate_total(
+         %{
+           changes: %{
+             price_for_form: price_for_form,
+             quantity: qty
+           },
+           data: %{total: %{currency: currency}}
+         } = changeset
+       ) do
+    price_for_form = price_for_form |> convert_to_cents() |> convert_float_to_int()
+    total = (price_for_form * qty) |> Money.new(currency)
+
+    changeset =
+      changeset
+      |> put_change(:price, Money.new(price_for_form, currency))
+      |> put_change(:total, total)
 
     changeset
   end
@@ -46,4 +60,8 @@ defmodule Anya.Invoices.Item do
   defp maybe_calculate_total(changeset) do
     changeset
   end
+
+  defp convert_to_cents(dollars_and_cents), do: dollars_and_cents * 100
+
+  defp convert_float_to_int(float), do: float |> trunc()
 end
